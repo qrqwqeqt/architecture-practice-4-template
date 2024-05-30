@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Run Integration Tests
+        run: docker-compose -f docker-compose.yaml -f docker-compose.test.yaml up --exit-code-from test
+
+      - name: Run Unit Tests
+        run: go test -v ./cmd/lb

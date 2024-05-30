@@ -15,13 +15,15 @@ import (
 )
 
 var (
-	port         = flag.Int("port", 8090, "load balancer port")
-	timeoutSec   = flag.Int("timeout-sec", 3, "request timeout time in seconds")
-	https        = flag.Bool("https", false, "whether backends support HTTPs")
+	port = flag.Int("port", 8090, "load balancer port")
+	timeoutSec = flag.Int("timeout-sec", 3, "request timeout time in seconds")
+	https = flag.Bool("https", false, "whether backends support HTTPs")
+
 	traceEnabled = flag.Bool("trace", false, "whether to include tracing information into responses")
 )
+
 var (
-	timeout     = time.Duration(*timeoutSec) * time.Second
+	timeout = time.Duration(*timeoutSec) * time.Second
 	serversPool = []string{
 		"server1:8080",
 		"server2:8080",
@@ -36,6 +38,7 @@ func scheme() string {
 	}
 	return "http"
 }
+
 func health(dst string) bool {
 	ctx, _ := context.WithTimeout(context.Background(), timeout)
 	req, _ := http.NewRequestWithContext(ctx, "GET",
@@ -49,6 +52,7 @@ func health(dst string) bool {
 	}
 	return true
 }
+
 func forward(dst string, rw http.ResponseWriter, r *http.Request) error {
 	ctx, _ := context.WithTimeout(r.Context(), timeout)
 	fwdRequest := r.Clone(ctx)
@@ -56,6 +60,7 @@ func forward(dst string, rw http.ResponseWriter, r *http.Request) error {
 	fwdRequest.URL.Host = dst
 	fwdRequest.URL.Scheme = scheme()
 	fwdRequest.Host = dst
+
 	resp, err := http.DefaultClient.Do(fwdRequest)
 	if err == nil {
 		for k, values := range resp.Header {
@@ -80,6 +85,7 @@ func forward(dst string, rw http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 }
+
 func getIndex(address string) int {
 	hash := fnv.New32()
 	hash.Write([]byte(address))
@@ -87,6 +93,7 @@ func getIndex(address string) int {
 	serverIndex := hashed % len(serversPool)
 	return serverIndex
 }
+
 func healthCheck(servers []string, result []string) {
 	for i, server := range servers {
 		server := server
@@ -110,6 +117,7 @@ func main() {
 	frontend := httptools.CreateServer(*port, http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		forward(poolOfHealthyServers[getIndex(r.RemoteAddr)], rw, r)
 	}))
+
 	log.Println("Starting load balancer...")
 	log.Printf("Tracing support enabled: %t", *traceEnabled)
 	frontend.Start()
