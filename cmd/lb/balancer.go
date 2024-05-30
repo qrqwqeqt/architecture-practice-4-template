@@ -12,19 +12,20 @@ import (
 	"time"
 
 	"github.com/qrqwqeqt/architecture-practice-4-template/httptools"
-	"github.com/qrqwqeqt/architecture-practice-4-template//signal"
+	"github.com/qrqwqeqt/architecture-practice-4-template/signal"
+
 )
 
 var (
-	port = flag.Int("port", 8090, "load balancer port")
+	port       = flag.Int("port", 8090, "load balancer port")
 	timeoutSec = flag.Int("timeout-sec", 3, "request timeout time in seconds")
-	https = flag.Bool("https", false, "whether backends support HTTPs")
+	https      = flag.Bool("https", false, "whether backends support HTTPs")
 
 	traceEnabled = flag.Bool("trace", false, "whether to include tracing information into responses")
 )
 
 var (
-	timeout = time.Duration(*timeoutSec) * time.Second
+	timeout     = time.Duration(*timeoutSec) * time.Second
 	serversPool = []string{
 		"server1:8080",
 		"server2:8080",
