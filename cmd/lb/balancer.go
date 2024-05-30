@@ -11,8 +11,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/archit3cture-labs/4-lab/httptools"
-	"github.com/archit3cture-labs/4-lab/signal"
+	"github.com/qrqwqeqt/architecture-practice-4-template/httptools"
+	"github.com/qrqwqeqt/architecture-practice-4-template//signal"
 )
 
 var (
