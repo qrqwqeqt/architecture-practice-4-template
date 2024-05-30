@@ -105,20 +105,6 @@ func healthCheck(servers []string, result []string) {
 func main() {
 	flag.Parse()
 
-	// TODO: Використовуйте дані про стан сервреа, щоб підтримувати список тих серверів, яким можна відправляти ззапит.
-	// for i, server := range serversPool {
-	// 	server := server
-	// 	i := i
-	// 	go func() {
-	// 		for range time.Tick(10 * time.Second) {
-	// 			if health(server) {
-	// 				poolOfHealthyServers[i] = server
-	// 			}
-	// 			log.Println(server, health(server))
-	// 		}
-	// 	}()
-	// }
-
 	healthCheck(serversPool, poolOfHealthyServers)
 
 	frontend := httptools.CreateServer(*port, http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
