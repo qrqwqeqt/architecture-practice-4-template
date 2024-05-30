@@ -1,5 +1,6 @@
 module github.com/qrqwqeqt/architecture-practice-4-template
 
+
 go 1.20
 
 require github.com/stretchr/testify v1.8.4
