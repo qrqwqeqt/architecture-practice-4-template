@@ -3,7 +3,11 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - '**'  # Триггер на пуши во все ветки
+  pull_request:  # Дополнительно, если хотите запускать тесты при открытии PR
+    branches:
+      - '**'  # Триггер на PR из всех веток
+
 
 jobs:
   build-and-test:
